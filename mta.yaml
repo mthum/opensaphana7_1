@@ -1,9 +1,9 @@
 ID: openSAPHANA
-_schema-version: "2.1"
+_schema-version: '2.1'
 description: SAP HANA Basics For Developers
 version: 0.0.1
 modules:
-  - name: openSAPHANA-db
+  - name: module-db
     type: hdb
     path: db
     parameters:
@@ -11,7 +11,7 @@ modules:
       disk-quota: 512M
     requires:
       - name: openSAPHANA-db-hdi-container
-  - name: openSAPHANA-srv
+  - name: module-srv
     type: nodejs
     path: srv
     parameters:
@@ -20,11 +20,20 @@ modules:
     provides:
       - name: srv_api
         properties:
-          url: ${default-url}
+          url: '${default-url}'
     requires:
       - name: openSAPHANA-db-hdi-container
+  - name: web
+    type: html5
+    path: web
+    requires:
+      - name: openSAPHANA-MTH-UAA
 resources:
   - name: openSAPHANA-db-hdi-container
     type: com.sap.xs.hdi-container
     properties:
-      hdi-container-name: ${service-name}
+      hdi-container-name: '${service-name}'
+  - name: openSAPHANA-MTH-UAA
+    type: com.sap.xs.uaa-space
+    parameters:
+      path: xs-security.json
